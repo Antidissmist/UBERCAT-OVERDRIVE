@@ -4,5 +4,5 @@ dotriplanar = false;
 setup_3d_object();
 scaletoroom();
 
-height = 999;
+height = 9999;
 

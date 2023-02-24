@@ -9,6 +9,13 @@ meowpower = 0;
 walkspeed = .075;
 walklevel = 0;
 flight = false;
+lasering = false;
+laserx = 0;
+lasery = 0;
+laserz = 0;
+won = false;
+wintimer = 0;
+fadeout = 0;
 
 scalepostoroom();
 
@@ -55,13 +62,14 @@ unlocks[70] = {
 	get: function(){
 		flight = true;
 	},
-	text: "SUPER MODE",
+	text: "UBER MODE",
 };
 
 //88
 
 
-vbuff = obj_camera.vbuff_cat
+vbuff = obj_camera.vbuff_cat;
+vbuff_air = obj_camera.vbuff_cat_jump;
 anim_walk = [
 	load_vbuff("cat_step1"),
 	vbuff,
@@ -73,10 +81,15 @@ tex = sprite_get_texture(sp_tex_cat,0);
 
 setup_3d_object();
 onground = function(){
-	grounded = true;
+	if !prevgrounded {
+		//squish = .1;
+	}
+	//grounded = true;
 	if state=="flying" {
 		screenshake(1);
+		state = "walking";
 	}
+	zsp = min(zsp,0);
 }
 zsprev = 0;
 fric = .8;
@@ -85,6 +98,7 @@ jholdtimer = 0;
 
 squish = 1;
 grounded = false;
+prevgrounded = false;
 grav    = .015;
 airgrav = .008
 walktimer = 0;

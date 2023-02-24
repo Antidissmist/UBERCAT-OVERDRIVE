@@ -126,6 +126,7 @@ function setup_3d_object() {
 	onground = function(){
 		//
 	}
+	collides = true;
 }
 function yeet(inst=id) {
 	screenshake(2);
@@ -134,6 +135,7 @@ function yeet(inst=id) {
 			blowaway = true;
 			blowx = obj_cat.x;
 			blowy = obj_cat.y;
+			collides = false;
 		}
 	}
 }
@@ -176,6 +178,52 @@ function get_yeet() {
 }
 
 
+function point_direction_3d( x1,y1,z1, x2,y2,z2 ) {
+	
+	/// [yaw, pitch]
+	/*
+	return [
+		radtodeg(arctan2(xx,yy))+180,
+		//point_direction(0,0,xx,yy),
+		radtodeg(arcsin(-clamp(zz,-1,1)))
+	];*/
+	
+	
+	var len = point_distance_3d(x1,y1,z1,x2,y2,z2);
+	var normal_z = (z2-z1) / len;
+	var yaw = point_direction(x1,y1,x2,y2)
+	try { //bruh
+		var pitch = darcsin(clamp(normal_z,-1,1));
+	}
+	catch(e) {
+		log(e);
+		var pitch = 0;
+	}
+
+	return [yaw,pitch];
+	
+}
+function draw_line_3d(x1,y1,z1,x2,y2,z2) {
+	
+	var len = point_distance_3d(x1,y1,z1,x2,y2,z2);
+	var pdir = point_direction_3d(x1,y1,z1,x2,y2,z2);
+	var pitch = pdir[1];
+	var yaw = pdir[0];
+	
+	matrix_stack_push(matrix_build(x1,y1,z1, 0,0,yaw, 1,1,1));
+	matrix_stack_push(matrix_build(0,0,0, 0,pitch,0, 1,1,1));
+	matrix_set_top();
+	
+	draw_line(0,0,len,0);
+	
+	
+	matrix_stack_pop();
+	matrix_stack_pop();
+	matrix_set_top();
+	
+}
+
+
 
 /////camera
 function update_camera() {
@@ -199,13 +247,20 @@ function update_camera() {
 		
 		var plx = lengthdir_x(1,pitch);
 		var ply = lengthdir_x(1,pitch);
+		
+		
+		if obj_cat.won {
+			camdist += .17;
+			camdist = min(camdist,50);
+		}
+		
 		var cdist = camdist;
 		do {
 			x = xto+lengthdir_x(cdist,yaw) *plx;
 			y = yto+lengthdir_y(cdist,yaw) *ply;
 			z = zto+lengthdir_y(cdist,pitch);
 			cdist -= .25;
-		} until ( !position_solid(x,y,z) && z<0 );
+		} until ( (!position_solid(x,y,z) && z<0) || cdist<=.5 );
 		
 		
 		//camera direction vector
@@ -280,14 +335,38 @@ function place_solid(xx,yy,zz,obj=obj_solid) {
 		var c;
 		for(var i=0; i<len; i++) {
 			c = list[| i];
-			if rectangle_in_rectangle( 0,zz-height,1,zz, 0,c.z-c.height,1,c.z) {
+			if c.collides && rectangle_in_rectangle( 0,zz-height,1,zz, 0,c.z-c.height,1,c.z) {
 				return true;
 			}
 		}
 		
 	}
+	else if instance_exists(obj_moon) && point_distance_3d(x,y,z, obj_moon.x,obj_moon.y,obj_moon.z)<obj_moon.radius {
+		return true;
+	}
 	
 	return false;
+	
+}
+function yeet_place(xx,yy,zz) {
+	
+	
+	var list = instplacelist;
+	ds_list_clear(list);
+		
+	instance_place_list(xx,yy,obj_house,list,false);
+	instance_place_list(xx,yy,obj_bush,list,false);
+	instance_place_list(xx,yy,obj_hitmeow,list,false);
+		
+	var len = dsize(list);
+	var c;
+	for(var i=0; i<len; i++) {
+		c = list[| i];
+		if c.collides && rectangle_in_rectangle( 0,zz-height,1,zz, 0,c.z-c.height,1,c.z) {
+			yeet(c);
+		}
+	}
+	
 	
 }
 function instance_place_3d(xx,yy,zz,obj=obj_solid) {

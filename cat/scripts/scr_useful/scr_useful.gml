@@ -106,8 +106,7 @@ function collectnum(text) {
 
 
 
-function dtext(x,y,str,sc=2,alph=1) {
-	var c = c_white;
+function dtext(x,y,str,sc=2,alph=1,c=c_white) {
 	draw_text_transformed_color(x,y,str,sc,sc, 0, c,c,c,c,alph);
 }
 function dtext_outlined(x,y,str,sc=2,alph=1) {

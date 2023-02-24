@@ -13,7 +13,10 @@ vbuff_man_stand = load_vbuff("man_stand");
 vbuff_man_step = load_vbuff("man_step");
 vbuff_man_air = load_vbuff("man_air");
 vbuff_car = load_vbuff("car");
+vbuff_jet = load_vbuff("jet");
 vbuff_shockwave = load_vbuff("shockwave");
+vbuff_moonsphere = load_vbuff("moonsphere");
+startex = sprite_get_texture(sp_stars,0);
 
 #endregion
 
@@ -66,6 +69,7 @@ yawscale = .1;
 pitchscale = .1;
 camdist = 9;
 
+fovmax = 170;
 fov_def = 60;
 fov = fov_def;
 fovtarg = fov;

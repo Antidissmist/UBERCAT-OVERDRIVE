@@ -7,3 +7,4 @@ lifetime = 200;
 if randang {
 	ang = random(360);
 }
+dobillboard = true;
