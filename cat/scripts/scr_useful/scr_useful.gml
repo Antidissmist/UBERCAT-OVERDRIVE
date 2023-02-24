@@ -48,14 +48,27 @@ function scalepostoroom() {
 }
 
 function putonbuildings() {
-	var pl = instance_place(x,y,obj_solid);
-	if pl==noone { pl = instance_place(x,y,obj_house) }
-	if pl==noone { pl = instance_place(x,y,obj_house2) }
-	if pl==noone { pl = instance_place(x,y,obj_house3) }
-	if pl!=noone {
-		zstart = (pl.z-pl.height);
-		z = zstart+.01;
+	
+	var list = instplacelist;
+	ds_list_clear(list);
+	instance_place_list(x,y,obj_solid,list,false);
+	instance_place_list(x,y,obj_house,list,false);
+	instance_place_list(x,y,obj_house2,list,false);
+	instance_place_list(x,y,obj_house3,list,false);
+	
+	
+	for(var i=0; i<dsize(list); i++) {
+		var el = list[| i];
+		zstart = min(zstart, el.z-el.height );
 	}
+	
+	z = zstart+.01;
+	
+	
+}
+
+function interval(n) {
+	return (floor(current_time/100) % n) == 0;
 }
 
 function path_getx(pt,perc) {

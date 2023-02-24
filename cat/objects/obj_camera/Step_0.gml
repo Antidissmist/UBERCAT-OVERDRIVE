@@ -65,5 +65,6 @@ if keyboard_check(vk_control) {
 yaw -= mousedx*yawscale;
 pitch += mousedy*pitchscale;
 shake = lerp(shake,0,.15);
+fov = lerp(fov,fovtarg,.075);
 
 pitch = clamp(pitch,-pitchlimit,pitchlimit);

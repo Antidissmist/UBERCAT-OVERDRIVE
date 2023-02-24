@@ -12,7 +12,6 @@ draw_surface_ext(application_surface,0,0, 1,1, 0,c_white,1);
 
 
 
-
 ////ui
 var scale = 3;
 var guw = gw/scale;
@@ -20,7 +19,7 @@ var guh = gh/scale;
 
 matrix_set(matrix_world,matrix_build(0,0,0, 0,0,0, scale,scale,scale));
 
-var pspc = 5;
+var pspc = 2.5;
 var wid = obj_cat.points*pspc;
 var px = guw/2;
 var py = guh;
@@ -49,7 +48,11 @@ with obj_cat {
 		dtext_outlined(tx,ty+i++*tspc,"LMB to meow",1);
 	}
 	if canjump {
-		dtext_outlined(tx,ty+i++*tspc,"SPACE to jump",1);
+		dtext_outlined(tx,ty+i++*tspc,"press SPACE to jump",1);
+	}
+	if flight {
+		dtext_outlined(tx,ty+i++*tspc,"hold SPACE to launch",1);
+		dtext_outlined(tx,ty+i++*tspc,"W + mouse to fly",1);
 	}
 }
 

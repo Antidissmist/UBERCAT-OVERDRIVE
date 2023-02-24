@@ -123,6 +123,9 @@ function setup_3d_object() {
 	blowy = y;
 	blowawayspeed = 4;
 	yeettimer = 0;
+	onground = function(){
+		//
+	}
 }
 function yeet(inst=id) {
 	screenshake(2);
@@ -189,6 +192,9 @@ function update_camera() {
 			zto -= 2;
 			pitch = max(pitch,0);
 		}
+		else if state=="flying" {
+			
+		}
 		
 		
 		var plx = lengthdir_x(1,pitch);
@@ -199,7 +205,13 @@ function update_camera() {
 			y = yto+lengthdir_y(cdist,yaw) *ply;
 			z = zto+lengthdir_y(cdist,pitch);
 			cdist -= .25;
-		} until ( !position_solid(x,y,z) );
+		} until ( !position_solid(x,y,z) && z<0 );
+		
+		
+		//camera direction vector
+		vecx = -lengthdir_x(1,yaw) *plx;
+		vecy = -lengthdir_y(1,yaw) *ply;
+		vecz = -lengthdir_y(1,pitch);
 		
 		var vmat = matrix_build_lookat(x,y,z, xto,yto,zto, 0,0,1);
 		var pmat = matrix_build_projection_perspective_fov(fov,vw/vh, .01,3200);
@@ -243,6 +255,7 @@ function move3d() {
 			z = 0;
 		}
 		zsp = 0;
+		onground();
 	}
 }
 

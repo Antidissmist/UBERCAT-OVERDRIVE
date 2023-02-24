@@ -29,6 +29,7 @@
     {"id":{"name":"sp_tex_cat","path":"sprites/sp_tex_cat/sp_tex_cat.yy",},"order":0,},
     {"id":{"name":"sp_treebox","path":"sprites/sp_treebox/sp_treebox.yy",},"order":16,},
     {"id":{"name":"sp_inviswall","path":"sprites/sp_inviswall/sp_inviswall.yy",},"order":17,},
+    {"id":{"name":"sp_trail_white","path":"sprites/sp_trail_white/sp_trail_white.yy",},"order":41,},
     {"id":{"name":"obj_cat","path":"objects/obj_cat/obj_cat.yy",},"order":1,},
     {"id":{"name":"obj_camera","path":"objects/obj_camera/obj_camera.yy",},"order":0,},
     {"id":{"name":"shd_triplanar","path":"shaders/shd_triplanar/shd_triplanar.yy",},"order":1,},
@@ -54,6 +55,7 @@
     {"id":{"name":"obj_decal","path":"objects/obj_decal/obj_decal.yy",},"order":19,},
     {"id":{"name":"sp_house1_map","path":"sprites/sp_house1_map/sp_house1_map.yy",},"order":21,},
     {"id":{"name":"obj_house","path":"objects/obj_house/obj_house.yy",},"order":12,},
+    {"id":{"name":"obj_shockwave","path":"objects/obj_shockwave/obj_shockwave.yy",},"order":21,},
     {"id":{"name":"obj_alert","path":"objects/obj_alert/obj_alert.yy",},"order":8,},
     {"id":{"name":"sp_catfood","path":"sprites/sp_catfood/sp_catfood.yy",},"order":6,},
     {"id":{"name":"sp_bbox_wall","path":"sprites/sp_bbox_wall/sp_bbox_wall.yy",},"order":4,},
@@ -124,6 +126,7 @@
     {"resourceType":"GMIncludedFile","resourceVersion":"1.0","name":"car.vbuff","CopyToMask":-1,"filePath":"datafiles",},
     {"resourceType":"GMIncludedFile","resourceVersion":"1.0","name":"man_air.vbuff","CopyToMask":-1,"filePath":"datafiles",},
     {"resourceType":"GMIncludedFile","resourceVersion":"1.0","name":"cat_sit.vbuff","CopyToMask":-1,"filePath":"datafiles",},
+    {"resourceType":"GMIncludedFile","resourceVersion":"1.0","name":"shockwave.vbuff","CopyToMask":-1,"filePath":"datafiles",},
   ],
   "MetaData": {
     "IDEVersion": "2022.0.0.19",

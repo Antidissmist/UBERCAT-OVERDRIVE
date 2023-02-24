@@ -11,10 +11,16 @@ pspeed = .02;
 hitcatspeed = .004;
 if path_exists(path) {
 	onpath = true;
+	pspeed = 1 / path_get_length(path);
+	
 	pathperc = random(1);
 	x = path_getx(path,pathperc);
 	y = path_gety(path,pathperc);
-	pspeed = 1 / path_get_length(path);
+	while place_meeting(x,y,obj_car) { //do not get stuck
+		pathperc = random(1);
+		x = path_getx(path,pathperc);
+		y = path_gety(path,pathperc);
+	}
 }
 velocity = pspeed;
 xprev = x;

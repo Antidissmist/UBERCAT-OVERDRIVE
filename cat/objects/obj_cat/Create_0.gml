@@ -38,26 +38,27 @@ unlocks[25] = {
 	},
 	text: "faster running",
 };
-unlocks[35] = {
+unlocks[40] = {
 	get: function(){
 		meowpower = 2;
 	},
 	text: "thunderous meowing",
 };
-unlocks[42] = {
+unlocks[50] = {
 	get: function(){
 		jumplevel = 1;
 		jumpspd = .625;
 	},
 	text: "super jumping",
 };
-unlocks[60] = {
+unlocks[70] = {
 	get: function(){
 		flight = true;
 	},
 	text: "SUPER MODE",
 };
 
+//88
 
 
 vbuff = obj_camera.vbuff_cat
@@ -71,16 +72,26 @@ tex = sprite_get_texture(sp_tex_cat,0);
 
 
 setup_3d_object();
+onground = function(){
+	grounded = true;
+	if state=="flying" {
+		screenshake(1);
+	}
+}
 zsprev = 0;
 fric = .8;
 fric_def = fric;
+jholdtimer = 0;
 
 squish = 1;
 grounded = false;
-grav = .015;
+grav    = .015;
+airgrav = .008
 walktimer = 0;
 zang = 0;
 walkdir = 0;
+launchtimer = 0;
+launchtime = 90;
 
 state = "walking";
 points = 0;

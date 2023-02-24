@@ -13,6 +13,7 @@ vbuff_man_stand = load_vbuff("man_stand");
 vbuff_man_step = load_vbuff("man_step");
 vbuff_man_air = load_vbuff("man_air");
 vbuff_car = load_vbuff("car");
+vbuff_shockwave = load_vbuff("shockwave");
 
 #endregion
 
@@ -53,6 +54,9 @@ setup_3d_object();
 x = 10;
 y = 10;
 z = -10;
+vecx = 1; //normalized dir of camera
+vecy = 0;
+vecz = 0;
 
 pitch = 0;
 pitchlimit = 89;
@@ -61,7 +65,10 @@ yaw = 0;
 yawscale = .1;
 pitchscale = .1;
 camdist = 9;
-fov = 60;
+
+fov_def = 60;
+fov = fov_def;
+fovtarg = fov;
 
 #region create world
 

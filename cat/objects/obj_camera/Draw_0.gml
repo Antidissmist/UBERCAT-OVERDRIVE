@@ -46,6 +46,7 @@ with obj_alert { event_perform(ev_draw,0); }
 
 with obj_billboard { event_perform(ev_draw,0); }
 with obj_decal { event_perform(ev_draw,0); }
+with obj_shockwave { event_perform(ev_draw,0); }
 
 
 

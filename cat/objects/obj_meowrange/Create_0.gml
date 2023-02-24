@@ -10,10 +10,10 @@ meowpower = 0;
 meow = function() {
 	
 	if meowpower>=1 {
-		scale = 1/3.4;
+		scale = 1/3.3;
 	}
 	else if meowpower>=2 {
-		scale = 1/2.6;
+		scale = 1/2;
 	}
 	
 	image_xscale = scale;
