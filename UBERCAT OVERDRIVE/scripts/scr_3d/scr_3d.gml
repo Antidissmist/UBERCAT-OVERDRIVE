@@ -100,7 +100,7 @@ function vertex_add_box_nofloors(vbuff, x,y,z, size, height, color=c_white,alpha
 
 function load_vbuff(fname,format=global.vformat) {
 	fname = string_replace(fname,".vbuff","");
-	var buff = buffer_load(fname+".vbuff");
+	var buff = buffer_load("gamedata/"+fname+".vbuff");
 	var m = vertex_create_buffer_from_buffer(buff, format);
 	buffer_delete(buff);
 	return m;
@@ -344,7 +344,10 @@ function place_solid(xx,yy,zz,obj=obj_solid) {
 		}
 		
 	}
-	else if instance_exists(obj_moon) && point_distance_3d(x,y,z, obj_moon.x,obj_moon.y,obj_moon.z)<obj_moon.radius {
+	else if instance_exists(obj_moon) && point_distance_3d(x,y,z, obj_moon.x,obj_moon.y,obj_moon.z)<(obj_moon.radius-.5) {
+		if id==obj_cat.id {
+			won = true;
+		}
 		return true;
 	}
 	

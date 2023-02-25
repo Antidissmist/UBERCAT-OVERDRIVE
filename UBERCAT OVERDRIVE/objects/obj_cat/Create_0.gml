@@ -62,7 +62,7 @@ unlocks[50] = {
 	text: "super jumping",
 };
 uberunlock = 70;
-unlocks[uberunlock] = {
+unlocks[uberunlock-1] = {
 	get: function(){
 		obj_camera.controlshake = 5;
 		flight = true;
@@ -70,6 +70,8 @@ unlocks[uberunlock] = {
 	hide: true,
 	text: "UBER MODE",
 };
+bruhlaunchtime = 0;
+bruhlaunch = false;
 
 //88
 

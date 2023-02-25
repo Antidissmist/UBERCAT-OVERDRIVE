@@ -30,6 +30,19 @@ if grounded {
 //interactions
 	
 if state=="walking" {
+	
+	
+	if firstlaunch && flight && !bruhlaunch {
+		bruhlaunchtime++
+		if bruhlaunchtime > 800 {
+			bruhlaunch = true;
+			var a = announce("hold space to launch");
+			a.lifetimer = 240;
+			a = announce("hold w and mouse to fly");
+			a.lifetimer = 240;
+		}
+	}
+	
 		
 		
 	//walking controls
