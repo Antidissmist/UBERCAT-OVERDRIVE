@@ -44,6 +44,7 @@ image_yscale = image_xscale;
 shake = 0;
 squish = 1;
 grounded = true;
+onplayer = false;
 
 crash = function() {
 	shake = .2;
@@ -54,6 +55,7 @@ crash = function() {
 	
 	hittimer = hittime;
 	zangtarg = zang+random_range(400,750)*choose(-1,1);
+	audio_play_sound(snd_carcrash,0,false);
 }
 hitmeow = function(meowpower) {
 	//hit by player

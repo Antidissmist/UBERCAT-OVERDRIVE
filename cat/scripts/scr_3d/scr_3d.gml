@@ -129,6 +129,7 @@ function setup_3d_object() {
 	collides = true;
 }
 function yeet(inst=id) {
+	audio_play_sound(snd_explosion2,0,false);
 	screenshake(2);
 	with inst {
 		if !blowaway {
@@ -171,6 +172,8 @@ function get_yeet() {
 				p.image_speed = random_range(.8,1.1);
 			}
 			screenshake(.25);
+			
+			audio_play_sound(snd_distantboom,0,false);
 			
 			instance_destroy();
 		}

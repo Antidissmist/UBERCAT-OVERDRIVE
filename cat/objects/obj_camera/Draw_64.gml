@@ -19,8 +19,10 @@ var guh = gh/scale;
 
 matrix_set(matrix_world,matrix_build(0,0,0, 0,0,0, scale,scale,scale));
 
-var pspc = 2.5;
-var wid = obj_cat.points*pspc;
+//var pspc = 2.5;
+//var wid = obj_cat.points*pspc;
+var pspc = 1*252/obj_cat.uberunlock;
+var wid = obj_cat.points*252/obj_cat.uberunlock;
 var px = guw/2;
 var py = guh;
 draw_sprite(sp_powerlevel,0, px,py);
@@ -30,7 +32,13 @@ var k;
 for(var i=0; i<len; i++) {
 	k = obj_cat.unlocks[i];
 	if is_struct(k) {
-		draw_sprite(sp_powerlevel_unlock,0,px-126+5+pspc*i,py-14);
+		var hide = false;
+		if variable_struct_exists(k,"hide") {
+			hide = k.hide;
+		}
+		if !hide {
+			draw_sprite(sp_powerlevel_unlock,0,px-126+5+pspc*i,py-14);
+		}
 	}
 }
 
@@ -44,6 +52,10 @@ with obj_cat {
 		var i=0;
 		var tx = 10;
 		var ty = 10;
+		
+		tx += random_range(-other.controlshake,other.controlshake);
+		ty += random_range(-other.controlshake,other.controlshake);
+		
 		var tspc = 20;
 		if canmeow {
 			dtext_outlined(tx,ty+i++*tspc,"LMB to meow",1);

@@ -8,3 +8,6 @@ gpu_set_ztestenable(false);
 
 draw_set_lighting(false);
 
+
+
+audio_stop_all();

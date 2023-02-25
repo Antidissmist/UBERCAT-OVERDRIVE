@@ -16,6 +16,7 @@ laserz = 0;
 won = false;
 wintimer = 0;
 fadeout = 0;
+firstlaunch = true;
 
 scalepostoroom();
 
@@ -23,12 +24,14 @@ unlocks = [];
 unlocks[5] = {
 	get: function(){
 		canmeow = true;
+		obj_camera.controlshake = 5;
 	},
 	text: "meowing unlocked",
 };
 unlocks[9] = {
 	get: function(){
 		canjump = true;
+		obj_camera.controlshake = 5;
 	},
 	text: "jumping unlocked",
 };
@@ -58,10 +61,13 @@ unlocks[50] = {
 	},
 	text: "super jumping",
 };
-unlocks[70] = {
+uberunlock = 70;
+unlocks[uberunlock] = {
 	get: function(){
+		obj_camera.controlshake = 5;
 		flight = true;
 	},
+	hide: true,
 	text: "UBER MODE",
 };
 
@@ -80,6 +86,13 @@ tex = sprite_get_texture(sp_tex_cat,0);
 
 
 setup_3d_object();
+hitground = function() {
+	with obj_hitmeow {
+		if point_distance_3d(x,y,z,obj_cat.x,obj_cat.y,obj_cat.z)<20 {
+			hitmeow(999);
+		}
+	}
+}
 onground = function(){
 	if !prevgrounded {
 		//squish = .1;
@@ -88,6 +101,10 @@ onground = function(){
 	if state=="flying" {
 		screenshake(1);
 		state = "walking";
+		audio_play_sound(snd_land,0,false);
+		var s = instance_create(x,y,z,obj_shockwave);
+		s.type = 1;
+		hitground();
 	}
 	zsp = min(zsp,0);
 }

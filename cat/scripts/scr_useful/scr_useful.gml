@@ -1,5 +1,5 @@
 
-
+global.debug = true;
 
 
 #macro CAM view_camera[0]

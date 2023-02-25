@@ -21,6 +21,7 @@ startex = sprite_get_texture(sp_stars,0);
 #endregion
 
 
+controlshake = 0;
 shake = 0;
 layer_set_visible(layer_get_id("hideme"),false);
 

@@ -25,6 +25,8 @@ blowawayspeed *= 3;
 hitmeow = function(mpower) {
 	
 	
+	audio_play_sound(snd_scaredcat,0,false);
+	
 	if mpower<1 {
 		shake = .2;
 		squish = 2.5;

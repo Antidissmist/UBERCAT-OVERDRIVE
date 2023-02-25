@@ -35,7 +35,8 @@ if onpath && hittimer<=0 {
 		crash();
 		exit;
 	}
-	if place_solid(x,y,z,obj_cat) && obj_cat.z>=zstart {
+	var playermeeting = place_solid(x,y,z,obj_cat);
+	if playermeeting && obj_cat.z>=zstart {
 		z = min(z,obj_cat.z-obj_cat.height);
 		zsp = min(zsp,-.3)
 		velocity = min(velocity,hitcatspeed);
@@ -44,6 +45,15 @@ if onpath && hittimer<=0 {
 		obj_cat.xsp += lengthdir_x(5,zang-90)+lengthdir_x(1,pdir);
 		obj_cat.ysp += lengthdir_y(5,zang-90)+lengthdir_y(1,pdir);
 		obj_cat.fric = 1;
+		if !onplayer {
+			audio_play_sound(snd_carbeep,0,false);
+			audio_play_sound(snd_grounded,0,false);
+		}
+		onplayer = true;
+		
+	}
+	if !playermeeting {
+		onplayer = false;
 	}
 	
 	x = tx;
