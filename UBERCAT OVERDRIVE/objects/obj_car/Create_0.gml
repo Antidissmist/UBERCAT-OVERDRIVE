@@ -25,11 +25,14 @@ if path_exists(path) {
 velocity = pspeed;
 xprev = x;
 yprev = y;
+zprev = z;
 zangdiff = 0;
 hittimer = 0;
 hittime = 75;
 zangtarg = 0;
 
+
+ride_setup(0,0,-4);
 
 
 sprite_index = sp_car_tex;
@@ -38,27 +41,39 @@ tex = sprite_get_texture(sp_car_tex,0);
 
 zang = random(360);
 
-image_xscale = 1/10;
+image_xscale = 1/9;
 image_yscale = image_xscale;
 
 shake = 0;
 squish = 1;
 grounded = true;
 onplayer = false;
+unmounttimer = 0;
+unmounttime = 120;
+
+
+aem = audio_emitter_create();
+audio_emitter_falloff(aem,global.falloff_dist,global.falloff_max,global.falloff_factor);
+audio_play_sound_on(aem,snd_engine,true,0,1.2);
 
 crash = function() {
 	shake = .2;
 	squish = 2.5;
-	if z>=0 {
+	//if z>=0 {
 		zsp = -.25;
-	}
+	//}
 	
 	hittimer = hittime;
 	zangtarg = zang+random_range(400,750)*choose(-1,1);
-	audio_play_sound(snd_carcrash,0,false);
+	sfx_play_3d(snd_carcrash,x,y,z);
 }
 hitmeow = function(meowpower) {
 	//hit by player
+	
+	if obj_cat.riding==id {
+		obj_cat.riding = noone;
+		unmounttimer = unmounttime;
+	}
 	
 	if meowpower>=1 {
 		screenshake(1);

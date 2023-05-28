@@ -8,6 +8,10 @@ path = pt_jet1;
 zstart = -300-random(80);
 z = zstart;
 
+aem = audio_emitter_create();
+audio_emitter_falloff(aem,global.falloff_dist,global.falloff_max,global.falloff_factor);
+audio_play_sound_on(aem,snd_jet,true,0,2);
+
 onpath = false;
 pathperc = 0;
 pspeed = .02;

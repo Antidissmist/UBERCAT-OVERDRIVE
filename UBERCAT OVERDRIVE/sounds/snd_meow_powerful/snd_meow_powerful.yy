@@ -15,7 +15,7 @@
     "path": "audiogroups/audiogroup_default",
   },
   "soundFile": "snd_meow_powerful.wav",
-  "duration": 4.794921,
+  "duration": 0.590181,
   "parent": {
     "name": "Sounds",
     "path": "folders/Sounds.yy",

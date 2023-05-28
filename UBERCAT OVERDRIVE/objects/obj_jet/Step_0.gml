@@ -11,12 +11,13 @@ squish = lerp(squish,1,.2);
 if onpath && hittimer<=0 {
 	xprev = x;
 	yprev = y;
+	zprev = z;
 	velocity = lerp(velocity,pspeed,.05);
 	pathperc = (pathperc+velocity) % 1;
 	var tx = path_getx(path,pathperc);
 	var ty = path_gety(path,pathperc);
 	
-	if place_solid(tx,ty,z,obj_jet) {
+	if place_meeting_3d(tx,ty,z,obj_jet) {
 		crash();
 		exit;
 	}
@@ -28,6 +29,10 @@ if onpath && hittimer<=0 {
 	zangdiff = clamp(zangdiff,-25,25);
 	zangdiff = lerp(zangdiff,0,.1);
 	zang = lerp_angle(zang,mdir,.2);
+	
+	xsp = x-xprev;
+	ysp = y-yprev;
+	zsp = z-zprev;
 }
 
 if hittimer>0 {
@@ -36,7 +41,7 @@ if hittimer>0 {
 	velocity = 0;
 }
 
-if place_solid(x,y,z,obj_cat) && onpath {
+if place_meeting_3d(x,y,z,obj_cat) && onpath {
 	hitmeow();
 }
 
@@ -51,3 +56,8 @@ p.image_speed = random_range(.8,1.1);
 
 
 get_yeet();
+
+
+audio_emitter_position(aem,x,y,z);
+audio_emitter_velocity(aem,xsp*global.listener_speedmult,ysp*global.listener_speedmult,zsp*global.listener_speedmult);
+

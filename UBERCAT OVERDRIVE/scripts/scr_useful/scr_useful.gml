@@ -1,5 +1,4 @@
 
-global.debug = false;
 
 
 #macro CAM view_camera[0]
@@ -68,7 +67,10 @@ function putonbuildings() {
 }
 
 function interval(n) {
-	return (floor(current_time/100) % n) == 0;
+	if PAUSED {
+		return false;
+	}
+	return (floor(cur_time/100) % n) == 0;
 }
 
 function path_getx(pt,perc) {
@@ -81,7 +83,6 @@ function path_gety(pt,perc) {
 function object_in_room(inst=id) {
 	return point_in_rectangle(inst.x,inst.y,0,0,room_width,room_height);
 }
-
 
 
 function draw_bbox() {
@@ -109,7 +110,7 @@ function collectnum(text) {
 function dtext(x,y,str,sc=2,alph=1,c=c_white) {
 	draw_text_transformed_color(x,y,str,sc,sc, 0, c,c,c,c,alph);
 }
-function dtext_outlined(x,y,str,sc=2,alph=1) {
+function dtext_outlined(x,y,str,sc=2,alph=1,color=c_white) {
 	
 	var c = c_black;
 	var s = sc*2;
@@ -117,7 +118,7 @@ function dtext_outlined(x,y,str,sc=2,alph=1) {
 	draw_text_transformed_color(x+s,y,str,sc,sc, 0, c,c,c,c,alph);
 	draw_text_transformed_color(x,y-s,str,sc,sc, 0, c,c,c,c,alph);
 	draw_text_transformed_color(x,y+s,str,sc,sc, 0, c,c,c,c,alph);
-	c = c_white;
+	c = color;
 	draw_text_transformed_color(x,y,str,sc,sc, 0, c,c,c,c,alph);
 }
 

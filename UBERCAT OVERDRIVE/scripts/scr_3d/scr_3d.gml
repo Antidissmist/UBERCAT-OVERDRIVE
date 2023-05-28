@@ -31,7 +31,7 @@ function vertex_add_floor(vbuff, x1,y1,x2,y2, z, color=c_white,alpha=1) {
 }
 
 
-function vertex_add_wall(vbuff, x1,y1,x2,y2, z1,z2, color=c_white,alpha=1,flipnorm=0,sprite=-1) { //jank
+function vertex_add_wall(vbuff, x1,y1,x2,y2, z1,z2, color=c_white,alpha=1,flipnorm=0,sprite=-1,spind=0) { //jank
 	var nx = !flipnorm; //x direction
 	var ny = flipnorm; //y direction
 	var nz = 0;
@@ -41,7 +41,7 @@ function vertex_add_wall(vbuff, x1,y1,x2,y2, z1,z2, color=c_white,alpha=1,flipno
 	var ux2 = 1;
 	var uy2 = 1;
 	if sprite_exists(sprite) {
-		var u = sprite_get_uvs(sprite,0);
+		var u = sprite_get_uvs(sprite,spind);
 		ux1 = u[0]
 		uy1 = u[1];
 		ux2 = u[2];
@@ -128,6 +128,54 @@ function setup_3d_object() {
 	}
 	collides = true;
 }
+function draw_bbox_3d(scale=1,mode=0) {
+	//worst possible way you could do this
+	
+
+	if mode==0 {
+		var x1 = x-(x-bbox_left)/scale;
+		var y1 = y-(y-bbox_top)/scale;
+		var x2 = x-(x-bbox_right)/scale;
+		var y2 = y-(y-bbox_bottom)/scale;
+	
+	
+		//var x1 = bbox_left;
+		//var y1 = bbox_top;
+		//var x2 = bbox_right;
+		//var y2 = bbox_bottom;
+		var z1 = z;
+		var z2 = z-height;
+	
+		//base
+		draw_line_3d(x1,y1,z1, x2,y1,z1);
+		draw_line_3d(x1,y1,z1, x1,y2,z1);
+		draw_line_3d(x1,y2,z1, x2,y2,z1);
+		draw_line_3d(x2,y1,z1, x2,y2,z1);
+	
+		//top
+		draw_line_3d(x1,y1,z2, x2,y1,z2);
+		draw_line_3d(x1,y1,z2, x1,y2,z2);
+		draw_line_3d(x1,y2,z2, x2,y2,z2);
+		draw_line_3d(x2,y1,z2, x2,y2,z2);
+	
+		//edges
+		draw_line_3d(x1,y1,z1, x1,y1,z2);
+		draw_line_3d(x2,y1,z1, x2,y1,z2);
+		draw_line_3d(x1,y2,z1, x1,y2,z2);
+		draw_line_3d(x2,y2,z1, x2,y2,z2);
+	}
+	
+	//use sprite
+	else if mode==1 {
+		
+		var zstep = .1;
+		for(var zz=0; zz<height; zz+=zstep;) {
+			matrix_set(matrix_world,matrix_build(x,y,z-zz, 0,0,0, 1,1,1));
+			draw_sprite_ext(sprite_index,0,0,0, image_xscale,image_yscale,image_angle,c_white,.1);
+		}
+		gpu_set_cullmode(cull_noculling);
+	}
+}
 function yeet(inst=id) {
 	audio_play_sound(snd_explosion2,0,false);
 	screenshake(2);
@@ -199,7 +247,7 @@ function point_direction_3d( x1,y1,z1, x2,y2,z2 ) {
 		var pitch = darcsin(clamp(normal_z,-1,1));
 	}
 	catch(e) {
-		log(e);
+		//log(e);
 		var pitch = 0;
 	}
 
@@ -208,18 +256,18 @@ function point_direction_3d( x1,y1,z1, x2,y2,z2 ) {
 }
 function draw_line_3d(x1,y1,z1,x2,y2,z2) {
 	
+	
 	var len = point_distance_3d(x1,y1,z1,x2,y2,z2);
 	var pdir = point_direction_3d(x1,y1,z1,x2,y2,z2);
-	var pitch = pdir[1];
 	var yaw = pdir[0];
-	
+	var pitch = pdir[1];
+
+
+
 	matrix_stack_push(matrix_build(x1,y1,z1, 0,0,yaw, 1,1,1));
 	matrix_stack_push(matrix_build(0,0,0, 0,pitch,0, 1,1,1));
 	matrix_set_top();
-	
-	draw_line(0,0,len,0);
-	
-	
+		draw_sprite_ext(sp_wireframeline,0,0,0, len,1/20, 0, c_white,1);
 	matrix_stack_pop();
 	matrix_stack_pop();
 	matrix_set_top();
@@ -241,7 +289,7 @@ function update_camera() {
 		
 		if state=="walking" {
 			zto -= 2;
-			pitch = max(pitch,0);
+			pitch = max(pitch,-15);
 		}
 		else if state=="flying" {
 			
@@ -263,7 +311,7 @@ function update_camera() {
 			y = yto+lengthdir_y(cdist,yaw) *ply;
 			z = zto+lengthdir_y(cdist,pitch);
 			cdist -= .25;
-		} until ( (!position_solid(x,y,z) && z<0) || cdist<=.5 );
+		} until ( (!position_solid(x,y,z) && z<-0.15) || cdist<=.5 );
 		
 		
 		//camera direction vector
@@ -277,6 +325,11 @@ function update_camera() {
 		camera_set_view_mat(CAM,vmat);
 		camera_set_proj_mat(CAM,pmat);
 		camera_apply(CAM);
+		
+		
+		audio_listener_position(x,y,z);
+		audio_listener_orientation(xto-x,yto-y,zto-z, 0,0,-1);
+		audio_listener_velocity(obj_cat.xsp*global.listener_speedmult,obj_cat.ysp*global.listener_speedmult,obj_cat.zsp*global.listener_speedmult);
 		
 	}
 }
@@ -297,30 +350,113 @@ function move3d() {
 		x += xsp;
 	}
 	else {
+		var s = sign(xsp)*.1;
+		while !place_solid(x+s,y,z) {
+			x += s;
+		}
 		xsp = 0;
 	}
 	if !place_solid(x,y+ysp,z) {
 		y += ysp;
 	}
 	else {
+		var s = sign(ysp)*.1;
+		while !place_solid(x,y+s,z) {
+			y += s;
+		}
 		ysp = 0;
 	}
-	if !(place_solid(x,y,z+zsp) || z+zsp>=0) {
+	
+	if !place_solid(x,y,z+zsp) {
 		z += zsp;
 	}
 	else {
-		if z+zsp>=0 {
-			z = 0;
+		var s = sign(zsp)*.1;
+		while !place_solid(x,y,z+s) {
+			z += s;
 		}
 		zsp = 0;
-		onground();
 	}
+	var gcheck = place_solid(x,y,z+.1);
+	if gcheck {
+		if !grounded && zsp>=0 {
+			grounded = true;
+			onground();
+		}
+	}
+	else {
+		grounded = false;
+	}
+	/*if grounded && zsp>=0 {
+		while !place_solid(x,y,z+.1) {
+			z += .1;
+		}
+	}*/
+	
+	
+	/*
+	if mode==0 {
+		if !(place_solid(x,y,z+zsp) || z+zsp>=0) {
+			z += zsp;
+		}
+		else {
+			while !(place_solid(x,y,z+zsp) || z+zsp>=0) {
+				z += sign(zsp)/4;
+			}
+			if z+zsp>=0 {
+				z = 0;
+			}
+			zsp = 0;
+			//onground();
+		}
+	}
+	else {
+		if !(place_solid(x,y,z+zsp) || z+zsp>=0) {
+			z += zsp;
+		}
+		else {
+			while !(place_solid(x,y,z+zsp) || z+zsp>=0) {
+				z += sign(zsp)/4;
+			}
+			if z+zsp>=0 {
+				z = 0;
+			}
+			zsp = 0;
+			//onground();
+			//grounded = true;
+		}
+	}
+	*/
+	
+	
 }
 
 
 
 
+function win_game() {
+	with obj_cat {
+		won = true;
+	}
+	if global.speedrun_timer && global.speedrun.running {
+		global.speedrun.finish = cur_time;
+		global.speedrun.running = false;
+	}
+}
 
+function num_label(val,total,dec) {
+	return string_replace_all(string_format(val,total,dec)," ","0");
+}
+function numbertimelabel(mstime) {
+	
+	var totalseconds = mstime/1000;
+	var seconds = floor(totalseconds % 60);
+	var minutes = floor(totalseconds div 60);
+	var ms = floor(totalseconds*1000 % 1000);
+	
+	// M:SS.MMM
+	return num_label(minutes,2,0)+":"+num_label(seconds,2,0)+"."+num_label(ms/10,2,0);
+}
 
 
 
@@ -328,6 +464,9 @@ global._instplacelist = ds_list_create();
 #macro instplacelist global._instplacelist
 function place_solid(xx,yy,zz,obj=obj_solid) {
 	
+	if zz>0 {
+		return true;
+	}
 	
 	if place_meeting(xx,yy,obj) {
 		
@@ -344,9 +483,9 @@ function place_solid(xx,yy,zz,obj=obj_solid) {
 		}
 		
 	}
-	else if instance_exists(obj_moon) && point_distance_3d(x,y,z, obj_moon.x,obj_moon.y,obj_moon.z)<(obj_moon.radius-.5) {
+	if instance_exists(obj_moon) && point_distance_3d(x,y,z, obj_moon.x,obj_moon.y,obj_moon.z)<(obj_moon.radius-.5) {
 		if id==obj_cat.id {
-			won = true;
+			win_game();
 		}
 		return true;
 	}
@@ -354,6 +493,35 @@ function place_solid(xx,yy,zz,obj=obj_solid) {
 	return false;
 	
 }
+function place_meeting_3d(xx,yy,zz,obj) {
+	
+	if place_meeting(xx,yy,obj) {
+		
+		var list = instplacelist;
+		ds_list_clear(list);
+		instance_place_list(xx,yy,obj,list,false);
+		var len = dsize(list);
+		var c;
+		for(var i=0; i<len; i++) {
+			c = list[| i];
+			if c.collides && rectangle_in_rectangle( 0,zz-height,1,zz, 0,c.z-c.height,1,c.z) {
+				return true;
+			}
+		}
+		
+	}
+	
+	return false;
+	
+}
+
+
+function ride_setup(xoff,yoff,zoff) {
+	ride_xoff = xoff;
+	ride_yoff = yoff;
+	ride_zoff = zoff;
+}
+
 function yeet_place(xx,yy,zz) {
 	
 	

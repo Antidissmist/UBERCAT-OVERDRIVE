@@ -1,8 +1,7 @@
 
 
-
-if global.show_bboxes {
-	draw_self();
+if instance_exists(riding) {
+	exit;
 }
 
 

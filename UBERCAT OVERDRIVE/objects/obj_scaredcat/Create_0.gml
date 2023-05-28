@@ -3,11 +3,12 @@
 event_inherited();
 height = 2;
 sprite_index = sp_bbox_cat;
+image_index = irandom(sprite_get_number(sp_tex_cat2)-1);
 
 vbuff = obj_camera.vbuff_cat;
 vbuff_jump = obj_camera.vbuff_cat_jump;
 vbuff_sit = obj_camera.vbuff_cat_sit;
-tex = sprite_get_texture(sp_tex_cat2,0);
+tex = sprite_get_texture(sp_tex_cat2,image_index);
 
 zang = random(360);
 zangtarg = zang;

@@ -7,3 +7,6 @@ scalepostoroom();
 hitmeow = function(meowpower){
 	//
 }
+
+
+bonktimer = 0;

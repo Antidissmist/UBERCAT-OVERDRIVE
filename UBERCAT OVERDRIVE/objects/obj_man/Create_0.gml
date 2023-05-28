@@ -9,6 +9,9 @@ tex = sprite_get_texture(sp_tex_man1,0);
 tex_flip = sprite_get_texture(sp_tex_man_flip,0);
 tex_scared = sprite_get_texture(sp_tex_man_scared,0);
 
+aem = audio_emitter_create();
+audio_emitter_falloff(aem,global.falloff_dist,global.falloff_max,global.falloff_factor);
+
 zang = random(360);
 
 image_xscale = 1/10;
@@ -20,6 +23,7 @@ walkdir_targ = 0;
 walkchange = 3;
 walkspeed = .15;
 runspeed = .35;
+runspeed_increase = .12;
 
 state = "walking";
 vbuff_air = obj_camera.vbuff_man_air;
@@ -35,7 +39,9 @@ squish = 1;
 grounded = true;
 scarelevel = 0;
 moneytimer = 0;
-moneytime = 140;
+moneytime = 300;
+runtime = 0;
+rundir = 0;
 
 hitmeow = function(mpower) {
 	
@@ -54,6 +60,7 @@ hitmeow = function(mpower) {
 		if z>=0 {
 			zsp = -.25;
 		}
+		runspeed += runspeed_increase;
 	}
 	
 	zang = PLAYERDIR+90;
@@ -91,6 +98,7 @@ hitmeow = function(mpower) {
 		}
 		
 		yeet();
+		audio_play_sound_on(aem,snd_man_scream,false,0,2);
 	}
 	
 }

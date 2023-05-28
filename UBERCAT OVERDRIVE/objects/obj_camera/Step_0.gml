@@ -1,30 +1,17 @@
 /// @desc control
 
 
-mxprev = mousex;
-myprev = mousey;
-mousex = window_mouse_get_x();
-mousey = window_mouse_get_y();
-
-
 if !mouselock {
-	if mouse_check_button_pressed(mb_any) {
-		mouselock = true;
-	}
 	
 	window_set_cursor(cr_default);
 
-	mousedx = 0;
-	mousedy = 0;
-
 }
 else {
-	if keyboard_check_pressed(vk_escape) {
-		mouselock = false;
-	}
+	
+	window_set_cursor(cr_none);
 	
 	//window_mouse_set(window_get_width()/2,window_get_height()/2);
-	window_set_cursor(cr_none);
+	
 	
 	//mousedx = (mousex-(window_get_width()/2));
 	//mousedy = (mousey-(window_get_height()/2));
@@ -49,14 +36,21 @@ else {
 	/*mousedx = ( display_mouse_get_x() - (display_get_width()/2) );
 	mousedy = ( display_mouse_get_y() - (display_get_height()/2) );
 	window_mouse_set( display_get_width()/2, display_get_height()/2 );*/
+	
 }
 
+if !window_has_focus() && !PAUSED {
+	pause_game(true);
+}
 
+if key_pressed(vk_escape) && can_interact() {
+	pause_game(!PAUSED);
+}
 
 
 if keyboard_check(vk_control) && global.debug {
 	
-	if keyboard_check_pressed(ord("B")) {
+	if keyboard_check_pressed(ord("N")) {
 		global.show_bboxes = !global.show_bboxes;
 	}
 	if keyboard_check_pressed(ord("R")) {
@@ -64,15 +58,16 @@ if keyboard_check(vk_control) && global.debug {
 	}
 	if keyboard_check_pressed(ord("T")) {
 		repeat (10) {
-			instance_create_depth(obj_cat.x,obj_cat.y,0,obj_catfood);
+			instance_create(obj_cat.x,obj_cat.y,obj_cat.z,obj_catfood);
 		}
 	}
-}
-if keyboard_check(vk_control) //shhh
-&& keyboard_check(vk_shift) 
-&& keyboard_check(ord("D")) && keyboard_check_pressed(ord("B")) {
-	global.debug = !global.debug;
-	audio_play_sound(snd_pickup,0,false)
+	if keyboard_check_pressed(ord("U")) {
+		global.show_ui = !global.show_ui;
+	}
+	if keyboard_check_pressed(ord("M")) {
+		global.mastergain = !global.mastergain;
+		audio_set_master_gain(0,global.mastergain);
+	}
 }
 
 

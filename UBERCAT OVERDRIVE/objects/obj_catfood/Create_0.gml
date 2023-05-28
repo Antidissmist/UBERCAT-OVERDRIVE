@@ -16,3 +16,12 @@ collect = function() {
 
 image_xscale = 1/4;
 image_yscale = image_xscale;
+
+lerping = false;
+lerptime = 0;
+
+xstart = x;
+ystart = y;
+zstart = z;
+chan_pickup = animcurve_get_channel(ac_pickup,0);
+

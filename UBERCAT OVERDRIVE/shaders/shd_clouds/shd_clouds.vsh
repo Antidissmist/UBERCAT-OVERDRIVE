@@ -8,7 +8,7 @@ attribute vec2 in_TextureCoord;              // (u,v)
 
 uniform float itime;
 uniform vec2 campos;
-const float scale = 1.0/90.0;
+const float scale = 1.0/150.0;
 
 varying vec2 v_vTexcoord;
 varying vec4 v_vColour;

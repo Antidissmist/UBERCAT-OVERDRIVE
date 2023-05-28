@@ -2,6 +2,7 @@
 //show_debug_overlay(true)
 
 global.show_bboxes = false;
+global.show_ui = true;
 
 
 #region models
@@ -31,6 +32,7 @@ gpu_set_zwriteenable(true);
 gpu_set_ztestenable(true);
 gpu_set_alphatestenable(true);
 draw_set_font(fnt_kongtext);
+gpu_set_tex_mip_enable(mip_on);
 //lighting
 
 draw_set_lighting(true);
@@ -44,16 +46,19 @@ skycol_bottom = #f3ef7d;
 cloudy = -75;
 clouddist = 400;
 
+drawpoints = 0;
+menualph = 0;
+menumode = 0;
 mouselock = false;
-mousex = 0;
-mousey = 0;
-mxprev = 0;
-myprev = 0;
 mousedx = 0;
 mousedy = 0;
 
 
 setup_3d_object();
+
+
+
+#region camera
 
 x = 10;
 y = 10;
@@ -75,29 +80,33 @@ fov_def = 60;
 fov = fov_def;
 fovtarg = fov;
 
-#region create world
-
-ground = vertex_create_buffer();
-vertex_begin(ground,global.vformat);
-
-var size = 10;
-var step = 10;
-for(var xx=-size/2; xx<size; xx++) {
-	for(var yy=-size/2; yy<size; yy++) {
-		vertex_add_floor(ground,
-			xx*step,
-			yy*step,
-			xx*step+step,
-			yy*step+step,0,
-			make_color_hsv(93+random_range(-5,5),random_range(100,255),random_range(100,255))
-			,1);
-	}
+lock_camera = function() {
+	
+	window_set_cursor(cr_none);
+	mouselock = true;
+	
+	mousedx = 0;
+	mousedy = 0;
+	var winw = window_get_width();
+	var winh = window_get_height();
+	winw = round(winw/2)*2;
+	winh = round(winh/2)*2;
+	window_mouse_set( winw/2, winh/2 );
+	
+	
 }
+unlock_camera = function() {
+	mouselock = false;
+	mousedx = 0;
+	mousedy = 0;
+	window_set_cursor(cr_default);
+}
+lock_camera();
 
 
-vertex_end(ground);
-vertex_freeze(ground);
+#endregion
 
+#region create world
 
 
 clouds = vertex_create_buffer();
@@ -106,5 +115,43 @@ vertex_begin(clouds,global.vformat);
 vertex_end(clouds);
 vertex_freeze(clouds);
 cloudtex = sprite_get_texture(sp_clouds,0);
+
+//mountaintex = sprite_get_texture(sp_mountaintex,0);
+mountains = load_vbuff("mountain");
+
+
+
+///make random grass
+
+
+var col = instance_create_depth(0,0,0,obj_collider_test);
+col.sprite_index = sp_map;
+col.image_index = 1;
+
+
+grass = vertex_create_buffer();
+vertex_begin(grass,global.vformat);
+grasstex = sprite_get_texture(sp_grasses,0);
+
+var px,py,ang,lx,ly;
+var b = 1;
+var gheight = 1;
+repeat(1000) {
+	px = random_range(b,256-b);
+	py = random_range(b,256-b);
+	if position_meeting(px,py,col) && !position_meeting(px,py,obj_solid) {
+		ang = random(360);
+		lx = lengthdir_x(1,ang);
+		ly = lengthdir_y(1,ang);
+		px *= 2;
+		py *= 2;
+		vertex_add_wall(grass, px-lx,py-ly,px+lx,py+ly,0-gheight,0,,,,sp_grasses,irandom(sprite_get_number(sp_grasses)-1));
+	}
+}
+
+vertex_end(grass);
+vertex_freeze(grass);
+
+
 
 #endregion

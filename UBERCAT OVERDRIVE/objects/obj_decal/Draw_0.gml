@@ -1,7 +1,7 @@
 
 
 
-if lifetimer>30 || (floor(current_time/30) % 2 == 0) {
+if lifetimer>30 || (floor(cur_time/30) % 2 == 0) {
 
 
 	var sc = scale;

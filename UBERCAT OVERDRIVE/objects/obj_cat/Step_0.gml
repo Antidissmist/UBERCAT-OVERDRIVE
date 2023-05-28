@@ -6,12 +6,24 @@ var hpress = (keyboard_check(ord("D"))-keyboard_check(ord("A")))*mobile;
 var vpress = (keyboard_check(ord("S"))-keyboard_check(ord("W")))*mobile;
 
 
-grounded = z>=0 || place_solid(x,y,z+.05);
+if instance_exists(riding) {
+	hpress = 0;
+	vpress = 0;
+	grounded = true;
+	
+	x = riding.x+riding.ride_xoff;
+	y = riding.y+riding.ride_yoff;
+	z = riding.z+riding.ride_zoff;
+	
+}
+
+//grounded = place_solid(x,y,z+.05);
 if grounded {
-	if !prevgrounded && zsprev>0 {
+	airtime = 0;
+	/*if !prevgrounded && zsprev>0 {
 		squish = .1;
 		audio_play_sound(snd_grounded,0,false);
-	}
+	}*/
 	if state=="flying" {
 		with obj_hyperline {
 			instance_destroy();
@@ -24,6 +36,9 @@ if grounded {
 	audio_stop_sound(snd_flight);
 	state = "walking";
 	zsp = min(zsp,0);
+}
+else {
+	airtime++
 }
 
 
@@ -47,13 +62,21 @@ if state=="walking" {
 		
 	//walking controls
 	var yaw = obj_camera.yaw;
+	var lx = 0;
+	var ly = 0;
 	if vpress!=0 {
-		xsp += lengthdir_x(vpress,yaw)*walkspeed;
-		ysp += lengthdir_y(vpress,yaw)*walkspeed;
+		lx += lengthdir_x(vpress,yaw);
+		ly += lengthdir_y(vpress,yaw);
 	}
 	if hpress!=0 {
-		xsp += lengthdir_x(hpress,yaw+90)*walkspeed;
-		ysp += lengthdir_y(hpress,yaw+90)*walkspeed;
+		lx += lengthdir_x(hpress,yaw+90);
+		ly += lengthdir_y(hpress,yaw+90);
+	}
+	
+	if lx!=0 || ly!=0 {
+		var wdir = point_direction(0,0,lx,ly);
+		xsp += lengthdir_x(1,wdir)*walkspeed;
+		ysp += lengthdir_y(1,wdir)*walkspeed;
 	}
 
 
@@ -77,10 +100,8 @@ if state=="walking" {
 		meowind = irandom(sprite_get_number(sp_meow)-1);
 		shake = .1;
 			
-		var p = instance_create_depth(x,y,0,obj_meowrange);
+		var p = instance_create(x,y,z,obj_meowrange);
 		p.image_angle = zang;
-		p.z = z+.5;
-		p.height = 1;
 		p.meowpower = meowpower;
 		p.meow();
 			
@@ -103,6 +124,9 @@ if state=="walking" {
 	if flight {
 		jumppress = keyboard_check_released(vk_space)*mobile;
 	}
+	if jumppress {
+		jumpbuffer = jumpbuffer_time;
+	}
 	var jhold = keyboard_check(vk_space)*mobile;
 	if !jhold {
 		launchtimer = 0;
@@ -116,11 +140,20 @@ if state=="walking" {
 		
 		
 	//jump
-	if canjump && grounded && jumppress {
+	if canjump && (grounded || airtime<coyotetime) && (jumppress || jumpbuffer>0) {
+		jumpbuffer = 0;
+		airtime += coyotetime;
 		zsp = -jumpspd;
 		squish = 1.3;
 		audio_play_sound(snd_jump,0,false);
 		audio_stop_sound(snd_charge);
+		with riding {
+			unmounttimer = unmounttime;
+			other.xsp += xsp;
+			other.ysp += ysp;
+			other.zsp += zsp;
+		}
+		riding = noone;
 	}
 	
 	//takeoff
@@ -244,10 +277,8 @@ else if state=="flying" {
 			}
 		}
 			
-		var p = instance_create_depth(x,y,0,obj_meowrange);
+		var p = instance_create(x,y,z,obj_meowrange);
 		p.image_angle = zang;
-		p.z = z+.5;
-		p.height = 4;
 		p.meowpower = 999;
 		p.scale = 3;
 		p.meow();
@@ -274,7 +305,7 @@ else if state=="flying" {
 		zsp += lengthdir_y(vaccel,pitch);
 		
 		if point_distance_3d(x,y,z, obj_moon.x,obj_moon.y,obj_moon.z)<(obj_moon.radius+4) {
-			won = true;
+			win_game();
 		}
 		
 	}
@@ -347,22 +378,34 @@ squish = lerp(squish,1,.2);
 
 
 zsprev = zsp;
+prevgrounded = grounded;
 if !won {
 	move3d();
 }
 
 
 
-var pl = instance_place_3d(x,y,z,obj_catfood);
+var pl = instance_nearest(x,y,obj_catfood)
 if pl!=noone {
-	var prevpoints = points;
-	pl.collect();
-	for(var i=prevpoints+1; i<=points && i<alen(unlocks); i++) {
-		var k = unlocks[i];
-		if is_struct(k) {
-			method(id,k.get)();
-			audio_play_sound(snd_unlock,0,false);
-			announce(k.text);
+	var cdist = point_distance_3d(x,y,z,pl.x,pl.y,pl.z);
+	if cdist<6 {
+		with pl {
+			lerping = true;
+			xstart = x;
+			ystart = y;
+			zstart = z;
+		}
+	}
+	if cdist<1 {
+		var prevpoints = points;
+		pl.collect();
+		for(var i=prevpoints+1; i<=points && i<alen(unlocks); i++) {
+			var k = unlocks[i];
+			if is_struct(k) {
+				method(id,k.get)();
+				audio_play_sound(snd_unlock,0,false);
+				announce(k.text);
+			}
 		}
 	}
 }
@@ -370,7 +413,10 @@ if pl!=noone {
 if meowtimer>0 {
 	meowtimer--
 }
-prevgrounded = grounded;
+if jumpbuffer>0 {
+	jumpbuffer--
+}
+
 
 
 if won {

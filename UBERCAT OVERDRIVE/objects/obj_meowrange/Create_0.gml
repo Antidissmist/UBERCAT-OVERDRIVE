@@ -1,19 +1,21 @@
 
 
 setup_3d_object();
-height = 2;
+height = 5;
+
+z += height/2; //center around cat
 
 scale = 1/4;
 meowpower = 0;
-
+lifetimer = 90;
 
 meow = function() {
 	
-	if meowpower>=1 {
-		scale = 1/3.3;
+	if meowpower==1 {
+		scale = .4;
 	}
 	else if meowpower>=2 {
-		scale = 1/2;
+		scale = .65;
 	}
 	
 	image_xscale = scale;
@@ -27,6 +29,6 @@ meow = function() {
 		e.hitmeow(meowpower);
 	}
 	
-	instance_destroy();
+	//instance_destroy();
 	
 }

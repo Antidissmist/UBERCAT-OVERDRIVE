@@ -17,6 +17,7 @@ won = false;
 wintimer = 0;
 fadeout = 0;
 firstlaunch = true;
+riding = noone;
 
 scalepostoroom();
 
@@ -96,9 +97,13 @@ hitground = function() {
 	}
 }
 onground = function(){
-	if !prevgrounded {
-		//squish = .1;
+	airtime = 0;
+	if !prevgrounded && zsprev>0 {
+		squish = .1;
+		sfx_play(snd_grounded,,false);
 	}
+	grounded = true;
+	prevgrounded = true;
 	//grounded = true;
 	if state=="flying" {
 		screenshake(1);
@@ -125,16 +130,20 @@ zang = 0;
 walkdir = 0;
 launchtimer = 0;
 launchtime = 90;
+airtime = 0;
+coyotetime = 8;
+jumpbuffer = 0;
+jumpbuffer_time = 8;
 
 state = "walking";
 points = 0;
 
+grounded = true;
 
 meowtimer = 0;
 meowtime = 13;
 meowind = 0;
 shake = 0;
-
 
 image_xscale = 1/10;
 image_yscale = image_xscale;

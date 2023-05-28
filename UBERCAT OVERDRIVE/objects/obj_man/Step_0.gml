@@ -8,7 +8,7 @@ zsp += .015;
 z += zsp;
 
 var pground = grounded;
-if z>0 {
+if place_solid(x,y,z+0.1) {
 	z = 0;
 	zsp = 0;
 	grounded = true;
@@ -43,11 +43,20 @@ if state=="walking" {
 		walkdir_targ += random_range(160,200)*choose(-1,1);
 	}
 	
+	runtime = 0;
+	
 }
 else if state=="running" {
 	walktimer += 1.5;
 	
-	var rdir = PLAYERDIR+180;
+	var rdir = rundir;
+	
+	if random(1)<.05 {
+		rundir += random_range(-360,360);
+	}
+	if blowaway {
+		runspeed = 0;
+	}
 	
 	xsp = lengthdir_x(1,rdir)*runspeed;
 	ysp = lengthdir_y(1,rdir)*runspeed;
@@ -58,8 +67,9 @@ else if state=="running" {
 		zang = lerp_angle(zang,mdir,.2);
 	}
 	
+	runtime++
 	
-	if PLAYERDIST>50 {
+	if PLAYERDIST>60 && runtime>200 {
 		state = "walking";
 	}
 }
@@ -67,7 +77,18 @@ else if state=="running" {
 if moneytimer>0 {
 	moneytimer--
 }
+if bonktimer>0 {
+	bonktimer--
+}
 
+
+var xprev = x;
+var yprev = y;
+var zprev = z;
 
 move3d();
 get_yeet();
+
+
+audio_emitter_position(aem,x,y,z);
+audio_emitter_velocity(aem,(x-xprev)*global.listener_speedmult,(y-yprev)*global.listener_speedmult,(z-zprev)*global.listener_speedmult);
