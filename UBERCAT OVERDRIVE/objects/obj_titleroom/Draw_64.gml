@@ -7,6 +7,12 @@ if menumode==0 {
 		url_open(global.changelog_link);
 	}
 	
+	if os_type==os_gxgames {
+		draw_set_halign(fa_right);
+		dtext(gw-20,20, "hold ESCAPE to exit fullscreen",1,,c_text_darkred );
+		draw_center();
+	}
+	
 
 	var i=0;
 	var spc = 70;
@@ -28,7 +34,7 @@ if menumode==0 {
 		menumode = 2;
 		global.noclicking = true;
 	}
-	if button(tx,ty+spc*i++, "Exit", sc) {
+	if os_type!=os_gxgames && button(tx,ty+spc*i++, "Exit", sc) {
 		game_end();
 	}
 	

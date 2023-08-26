@@ -8,7 +8,7 @@ points = 1;
 collect = function() {
 	obj_cat.points += points;
 	collectnum("+"+string(points));
-	log("points: "+string(obj_cat.points));
+	//log("points: "+string(obj_cat.points));
 	
 	audio_play_sound(snd_pickup,0,false);
 	instance_destroy();
