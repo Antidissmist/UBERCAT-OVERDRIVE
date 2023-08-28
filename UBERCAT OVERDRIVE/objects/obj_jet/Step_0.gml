@@ -58,6 +58,7 @@ p.image_speed = random_range(.8,1.1);
 get_yeet();
 
 
-audio_emitter_position(aem,x,y,z);
-audio_emitter_velocity(aem,xsp*global.listener_speedmult,ysp*global.listener_speedmult,zsp*global.listener_speedmult);
-
+if audio_emitter_exists(aem) {
+	audio_emitter_position(aem,x,y,z);
+	audio_emitter_velocity(aem,xsp*global.listener_speedmult,ysp*global.listener_speedmult,zsp*global.listener_speedmult);
+}

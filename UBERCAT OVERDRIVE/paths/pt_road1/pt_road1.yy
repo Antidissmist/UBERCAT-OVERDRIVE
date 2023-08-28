@@ -2,9 +2,12 @@
   "resourceType": "GMPath",
   "resourceVersion": "1.0",
   "name": "pt_road1",
-  "kind": 1,
   "closed": true,
-  "precision": 4,
+  "kind": 1,
+  "parent": {
+    "name": "Paths",
+    "path": "folders/Paths.yy",
+  },
   "points": [
     {"speed":100.0,"x":19.410347,"y":132.77878,},
     {"speed":100.0,"x":17.538553,"y":154.08646,},
@@ -23,8 +26,5 @@
     {"speed":100.0,"x":59.077034,"y":103.18902,},
     {"speed":100.0,"x":35.102673,"y":117.93262,},
   ],
-  "parent": {
-    "name": "Paths",
-    "path": "folders/Paths.yy",
-  },
+  "precision": 4,
 }

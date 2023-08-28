@@ -3,17 +3,23 @@
 //draw_rectangle_color(0,0,gw,gh, skycol_top,skycol_top,skycol_bottom,skycol_bottom, false);
 
 
-
+var menualph_targ = PAUSED*.65;
 
 gpu_set_blendenable(false);
-if !PAUSED {
+if os_type==os_gxgames || !PAUSED {
 	draw_surface_ext(application_surface,0,0, 1,1, 0,c_white,1);
 }
+/*else if os_type==os_gxgames {
+	gpu_set_tex_filter(true);
+	draw_sprite_stretched(sp_pausebroke,0,0,0,applwidth,applheight);
+	gpu_set_tex_filter(false);
+}*/
 else {
-	draw_sprite_ext(global.pausesprite,0, 0,0, 1,1, 0,c_white,1);
+	if sprite_exists(global.pausesprite) {
+		draw_sprite_ext(global.pausesprite,0, 0,0, 1,1, 0,c_white,1);
+	}
 }
 gpu_set_blendenable(true);
-
 
 
 if !PAUSED && global.show_ui {
@@ -75,6 +81,12 @@ if !PAUSED && global.show_ui {
 			}
 		}
 	}
+	
+	
+	
+	if !window_mouse_get_locked() {
+		menualph_targ = .65;
+	}
 
 }
 
@@ -128,7 +140,14 @@ da(menualph);
 draw_rectangle(0,0,gw,gh,false);
 da(1);
 dc(c_white);
-menualph = lerp(menualph,PAUSED*.65,.4);
+menualph = lerp(menualph,menualph_targ,.4);
+
+
+if !PAUSED && global.show_ui && !window_mouse_get_locked() {
+	draw_center(1,1)
+	dtext_outlined(gw/2,gh*.33,"click or type\nto lock the mouse",1.5);
+	draw_center()
+}
 
 if PAUSED {
 	
@@ -146,7 +165,7 @@ if PAUSED {
 		i++
 	
 		if button(tx,ty+spc*i++, "Resume", sc) {
-			pause_game(false);
+			pause_game(false);			
 		}
 		if button(tx,ty+spc*i++, "Settings", sc) {
 			menumode = 1;

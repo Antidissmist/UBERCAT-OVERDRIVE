@@ -80,18 +80,22 @@ fov_def = 60;
 fov = fov_def;
 fovtarg = fov;
 
+showed_keys = false;
+beenlocked = false;
+
 lock_camera = function() {
 	
-	window_set_cursor(cr_none);
 	mouselock = true;
 	
 	mousedx = 0;
 	mousedy = 0;
-	var winw = window_get_width();
+	/*var winw = window_get_width();
 	var winh = window_get_height();
 	winw = round(winw/2)*2;
 	winh = round(winh/2)*2;
-	window_mouse_set( winw/2, winh/2 );
+	window_mouse_set( winw/2, winh/2 );*/
+	
+	window_mouse_set_locked(true);
 	
 	
 }
@@ -99,7 +103,7 @@ unlock_camera = function() {
 	mouselock = false;
 	mousedx = 0;
 	mousedy = 0;
-	window_set_cursor(cr_default);
+	window_mouse_set_locked(false);
 }
 lock_camera();
 

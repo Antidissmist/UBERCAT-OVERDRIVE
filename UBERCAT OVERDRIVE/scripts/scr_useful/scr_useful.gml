@@ -20,6 +20,7 @@
 #macro PLAYERDIST3D point_distance_3d(x,y,z,obj_cat.x,obj_cat.y,obj_cat.z)
 #macro image_randomize image_index=irandom(image_number-1)
 
+
 function matrix_reset() {
 	static mat = matrix_build_identity();
 	matrix_set(matrix_world,mat);

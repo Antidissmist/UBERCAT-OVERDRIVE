@@ -273,7 +273,7 @@ else if state=="flying" {
 		
 		with obj_hitmeow {
 			if point_distance_3d(x,y,z,obj_cat.x,obj_cat.y,obj_cat.z)<40 {
-				hitmeow();
+				hitmeow(999);
 			}
 		}
 			
@@ -423,7 +423,7 @@ if won {
 	wintimer++
 	
 	if random(1)<.2 {
-		audio_play_sound(snd_moonexplosion,0,false,.5,,random_range(.8,1.1));
+		audio_play_sound(snd_moonexplosion,0,false,.5,0,random_range(.8,1.1));
 	}
 	
 	screenshake(2);

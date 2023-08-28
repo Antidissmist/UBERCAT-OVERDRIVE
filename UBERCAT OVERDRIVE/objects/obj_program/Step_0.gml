@@ -26,3 +26,11 @@ if !PAUSED {
 }
 curtime_prev = current_time;
 
+
+if !window_has_focus() {
+	window_mouse_set_locked(false);
+}
+
+//window_set_cursor( window_mouse_get_locked() ? cr_none : cr_default );
+
+

@@ -243,12 +243,13 @@ function point_direction_3d( x1,y1,z1, x2,y2,z2 ) {
 	var len = point_distance_3d(x1,y1,z1,x2,y2,z2);
 	var normal_z = (z2-z1) / len;
 	var yaw = point_direction(x1,y1,x2,y2)
+	var pitch = 0;
 	try { //bruh
-		var pitch = darcsin(clamp(normal_z,-1,1));
+		pitch = darcsin(clamp(normal_z,-1,1));
 	}
 	catch(e) {
 		//log(e);
-		var pitch = 0;
+		pitch = 0;
 	}
 
 	return [yaw,pitch];

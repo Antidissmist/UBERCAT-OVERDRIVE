@@ -8,7 +8,7 @@ zsp += .015;
 z += zsp;
 
 var pground = grounded;
-if place_solid(x,y,z+0.1) {
+if place_solid(x,y,z+0.1) && !blowaway {
 	z = 0;
 	zsp = 0;
 	grounded = true;
@@ -115,7 +115,8 @@ get_yeet();
 var axsp = x-xprev;
 var aysp = y-yprev;
 var azsp = z-zprev;
-audio_emitter_position(aem,x,y,z);
-audio_emitter_velocity(aem,axsp*global.listener_speedmult,aysp*global.listener_speedmult,azsp*global.listener_speedmult);
-
+if audio_emitter_exists(aem) {
+	audio_emitter_position(aem,x,y,z);
+	audio_emitter_velocity(aem,axsp*global.listener_speedmult,aysp*global.listener_speedmult,azsp*global.listener_speedmult);
+}
 

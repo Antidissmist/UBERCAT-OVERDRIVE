@@ -26,8 +26,8 @@ global.speedrun_timer = false;
 function do_nothing(){}
 draw_set_circle_precision(32);
 
-
-function struct_get(str,name,def=undefined) {
+#macro struct_get struct_get_safe
+function struct_get_safe(str,name,def=undefined) {
 	return variable_struct_exists(str,name) ? str[$ name] : def;
 }
 
@@ -37,13 +37,12 @@ function key_pressed(key) {
 	return !global.noclicking && keyboard_check_pressed(key);
 }
 
-
 global.pause_exclude = [
 	obj_program,
 	obj_camera,
 	obj_transition,
 ];
-global.pausesprite = -1;
+global.pausesprite = noone;
 function pause_game(state) {
 	if !instance_exists(obj_camera) {
 		return;
@@ -64,8 +63,12 @@ function pause_game(state) {
 		
 		audio_pause_all();
 		
-		sprite_delete(global.pausesprite);
-		global.pausesprite = sprite_create_from_surface(application_surface,0,0,surface_get_width(application_surface),surface_get_height(application_surface),0,0,0,0);
+		//var sw = surface_get_width(application_surface);
+		//var sh = surface_get_height(application_surface);
+		//global.pausesprite = sprite_create_from_surface(application_surface,0,0,sw,sh,0,0,0,0);
+		
+		
+		
 		
 		instance_deactivate_all(false);
 		var len = alen(global.pause_exclude);
@@ -83,6 +86,17 @@ function pause_game(state) {
 		
 		
 	}
+	
+	if sprite_exists(global.pausesprite) {
+		//sprite_delete(global.pausesprite);
+	}
+	//global.pausesprite = noone;
+	
+	keyboard_key_release(ord("W"));
+	keyboard_key_release(ord("S"));
+	keyboard_key_release(ord("A"));
+	keyboard_key_release(ord("D"));
+	//keyboard_key_release(vk_space);
 	
 	if PAUSED!=prev {
 		sfx_play(PAUSED ? snd_pause : snd_unpause);
@@ -160,7 +174,6 @@ function draw_settings() {
 	var sc = 2;
 	
 	
-	var ret = false;
 	var ret = button(90,40, "Back", sc) || key_pressed(vk_escape);
 	
 	

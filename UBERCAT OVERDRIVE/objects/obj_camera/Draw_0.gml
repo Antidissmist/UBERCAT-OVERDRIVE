@@ -51,15 +51,23 @@ with obj_cat { event_perform(ev_draw,0); }
 //draw_light_define_ambient(#14181a);
 
 
-matrix_set(matrix_world,matrix_build(0,0,-.01, 0,0,0, 1,1,1));
+matrix_set(matrix_world,matrix_build(0,0,-.03, 0,0,0, 1,1,1));
 var wav = (sin(cur_time/300)/2+.5);
 dc(c_dkgray);
-with obj_catfood { //ground shadows
-	draw_circle(x-sprite_width*.3,y-sprite_height*.3,wav/2+.4,false);
+if os_type==os_gxgames {
+	with obj_catfood { //ground shadows
+		draw_circle(x,y,wav/2+.4,false);
+	}
+}
+else {
+	with obj_catfood { //ground shadows
+		draw_circle(x-sprite_width*.3,y-sprite_height*.3,wav/2+.4,false);
+	}
 }
 dc(c_white);
 matrix_reset();
 with obj_alert { event_perform(ev_draw,0); }
+
 
 
 shader_set(shd_billboard);

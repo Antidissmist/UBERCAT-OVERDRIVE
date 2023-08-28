@@ -32,6 +32,7 @@ if path_exists(path) {
 velocity = pspeed;
 xprev = x;
 yprev = y;
+zprev = z;
 zangdiff = 0;
 hittimer = 0;
 hittime = 75;
@@ -59,7 +60,7 @@ crash = function() {
 	hittimer = hittime;
 	zangtarg = zang+random_range(400,750)*choose(-1,1);
 }
-hitmeow = function(meowpower) {
+hitmeow = function() {
 	//hit by player
 	
 	screenshake(1);

@@ -1,0 +1,6 @@
+
+bugs fixed in beta, to fix later
+-audio_emitter_exists
+-global.pausesprite doesnt exist
+-new mouselock functions
+-ground check when blowaway

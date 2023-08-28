@@ -4,6 +4,9 @@ global.mastergain = 1;
 global.music = -1;
 
 global.gain_def = {};
+function gaindef(sound,gain) {
+	global.gain_def[$ sound] = gain;
+}
 gaindef(snd_carcrash,.81);
 gaindef(snd_unlock,.71);
 gaindef(snd_takeoff,.71);
@@ -18,22 +21,23 @@ gaindef(snd_carcrash,.81);
 function sound_set_gain(ind,g,frames=0) {
 	audio_sound_gain(ind,struct_get(global.gain_def,audio_get_name(ind),1)*g,frames/30*1000);
 }
-function gaindef(sound,gain) {
-	global.gain_def[$ sound] = gain;
-}
 function adjust_volume(gain=global.mastergain) {
 	
 	global.mastergain = clamp(gain,0,1);
 	
 	audio_set_master_gain(0,global.mastergain);
 	
-	
-	for(var i=0; audio_exists(i); i++) { //lol
-		sound_set_gain(i,global.mastergain);
+	/*
+	try {
+		for(var i=0; audio_exists(i); i++) {
+			sound_set_gain(i,global.mastergain);
+		}
 	}
+	catch (e) {
+		log(e);	
+	}*/
 	
 }
-adjust_volume();
 
 
 function sfx_play(snd,pit=1,interrupt=true) {

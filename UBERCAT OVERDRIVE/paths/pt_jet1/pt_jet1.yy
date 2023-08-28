@@ -2,9 +2,12 @@
   "resourceType": "GMPath",
   "resourceVersion": "1.0",
   "name": "pt_jet1",
-  "kind": 1,
   "closed": true,
-  "precision": 4,
+  "kind": 1,
+  "parent": {
+    "name": "Paths",
+    "path": "folders/Paths.yy",
+  },
   "points": [
     {"speed":100.0,"x":129.71756,"y":16.699326,},
     {"speed":100.0,"x":71.10531,"y":34.189117,},
@@ -16,8 +19,5 @@
     {"speed":100.0,"x":234.20737,"y":82.903404,},
     {"speed":100.0,"x":196.18695,"y":34.209526,},
   ],
-  "parent": {
-    "name": "Paths",
-    "path": "folders/Paths.yy",
-  },
+  "precision": 4,
 }
